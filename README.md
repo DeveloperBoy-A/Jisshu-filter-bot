@@ -2,7 +2,7 @@
   <img src="https://iili.io/2wp3N9f.jpg" alt="Jisshu-Auto-filter">
 </p>
 <h1 align="center">
-  <a href="https://telegram.me/JISSHU_BOTS">Jisshu Auto Filter Bot</a>
+  <a href="https://telegram.me/@its_ankit_meena907">Newmovies_BOT™</a>
 </h1>
 <img src="https://cdn.jsdelivr.net/gh/Jisshubot/Jisshubot/resources/hr.gif"/>
 
