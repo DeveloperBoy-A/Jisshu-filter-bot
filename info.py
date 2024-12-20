@@ -72,20 +72,20 @@ REQUEST_CHANNEL = int(request_channel) if request_channel and id_pattern.search(
 START_IMG = (environ.get('START_IMG', 'https://graph.org/file/18ddd37382b8f3ef49e7e-37b28b2afbc58247b7.jpg https://graph.org/file/05039361a52f538d4c725-654aa7d4885708229c.jpg')).split()
 FORCESUB_IMG = environ.get('FORCESUB_IMG', 'https://i.ibb.co/ZNC1Hnb/ad3f2c88a8f2.jpg')
 REFER_PICS = (environ.get("REFER_PICS", "https://envs.sh/PSI.jpg")).split() 
-PAYPICS = (environ.get('PAYPICS', 'https://graph.org/file/7101b3c8f07334d93e925-c5c7dcfcd8c0d269ec.jpg')).split()
+PAYPICS = (environ.get('PAYPICS', 'https://envs.sh/7W3.jpg')).split()
 SUBSCRIPTION = (environ.get('SUBSCRIPTION', 'https://graph.org/file/9f3f47c690bbcc67633c2.jpg'))
 REACTIONS = ["👀", "😱", "🔥", "😍", "🎉", "🥰", "😇", "⚡"]
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-FILE_AUTO_DEL_TIMER = int(environ.get('FILE_AUTO_DEL_TIMER', '600'))
+FILE_AUTO_DEL_TIMER = int(environ.get('FILE_AUTO_DEL_TIMER', '300'))
 AUTO_FILTER = is_enabled('AUTO_FILTER', True)
 IS_PM_SEARCH = is_enabled('IS_PM_SEARCH', False)
 IS_SEND_MOVIE_UPDATE = is_enabled('IS_SEND_MOVIE_UPDATE', False) # Don't Change It ( If You Want To Turn It On Then Turn It On By Commands) We Suggest You To Make It Turn Off If You Are Indexing Files First Time.
 PORT = environ.get('PORT', '5000')
 MAX_BTN = int(environ.get('MAX_BTN', '8'))
 AUTO_DELETE = is_enabled('AUTO_DELETE', True)
-DELETE_TIME = int(environ.get('DELETE_TIME', 1200))
+DELETE_TIME = int(environ.get('DELETE_TIME', 600))
 IMDB = is_enabled('IMDB', False)
 FILE_CAPTION = environ.get('FILE_CAPTION', f'{script.FILE_CAPTION}')
 IMDB_TEMPLATE = environ.get('IMDB_TEMPLATE', f'{script.IMDB_TEMPLATE_TXT}')
@@ -144,7 +144,7 @@ admin_cmds = [
     "/delreq", "/channel", "/del_file", "/delete",
     "/deletefiles", "/deleteall", 
     "All These Commands Can Be Used Only By Admins.", 
-    "⚡ powered by @UchihaClan007"
+    "⚡ powered by @its_ankit_meena907"
 ]
 
 cmds = [
