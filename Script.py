@@ -39,7 +39,7 @@ class script(object):
 <blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://t.me/its_ankit_meena907'>𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫_𝐁𝐨𝐲™(𝓐𝓷𝓴𝓲𝓽_𝓜𝓮𝓮𝓷𝓪😝)</a></b></blockquote>"""
     
 
-    ABOUT_TEXT = """<blockquote><b>‣ ᴍʏ ɴᴀᴍᴇ : ɪᴛᴀᴄʜɪ\n‣ ᴄʀᴇᴀᴛᴏʀ : <a href='https://t.me/its_ankit_meena907'>Mr.𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫_𝐁𝐨𝐲™(𝓐𝓷𝓴𝓲𝓽_𝓜𝓮𝓮𝓷𝓪😝)</a>\n‣ ʟɪʙʀᴀʀʏ : ᴘʏʀᴏɢʀᴀᴍ\n‣ ʟᴀɴɢᴜᴀɢᴇ : ᴘʏᴛʜᴏɴ\n‣ ᴅᴀᴛᴀ ʙᴀsᴇ : ᴍᴏɴɢᴏ ᴅʙ\n‣ ʜᴏsᴛᴇᴅ ᴏɴ  : ᴀʟʟ ᴡᴇʙ\n‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ5.2 [sᴛᴀʙʟᴇ]</b></blockquote>"""    
+    ABOUT_TEXT = """<blockquote><b>‣ ᴍʏ ɴᴀᴍᴇ : Newmovies_BOT™\n‣ ᴄʀᴇᴀᴛᴏʀ : <a href='https://t.me/its_ankit_meena907'>Mr.𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫_𝐁𝐨𝐲™(𝓐𝓷𝓴𝓲𝓽_𝓜𝓮𝓮𝓷𝓪😝)</a>\n‣ ʟɪʙʀᴀʀʏ : ᴘʏʀᴏɢʀᴀᴍ\n‣ ʟᴀɴɢᴜᴀɢᴇ : ᴘʏᴛʜᴏɴ\n‣ ᴅᴀᴛᴀ ʙᴀsᴇ : ᴍᴏɴɢᴏ ᴅʙ\n‣ ʜᴏsᴛᴇᴅ ᴏɴ  : ᴀʟʟ ᴡᴇʙ\n‣ ʙᴜɪʟᴅ sᴛᴀᴛᴜs : ᴠ5.2 [sᴛᴀʙʟᴇ]</b></blockquote>"""    
     
     SUPPORT_GRP_MOVIE_TEXT = '''<b>ʜᴇʏ {}
 
