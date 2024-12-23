@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="https://iili.io/2wp3N9f.jpg" alt="𝐓𝐨𝐤𝐲𝐨 𝐏𝐫𝐢𝐧𝐜𝐞𝐬𝐬𝐁𝐨𝐭™">
+  <img src="https://iili.io/2wp3N9f.jpg" alt="Tokyo Princess Bot">
 </p>
 <h1 align="center">
   <a href="https://cdn.jsdelivr.net/gh/Jisshubot/Jisshubot/resources/hr.gif</a>
 </h1>
-<img src="https://cdn.jsdelivr.net/gh/𝐓𝐨𝐤𝐲𝐨 𝐏𝐫𝐢𝐧𝐜𝐞𝐬𝐬𝐁𝐨𝐭™/𝐓𝐨𝐤𝐲𝐨 𝐏𝐫𝐢𝐧𝐜𝐞𝐬𝐬𝐁𝐨𝐭™/resources/hr.gif"/>
+<img src="https://cdn.jsdelivr.net/gh/Jisshubot/Jisshubot/resources/hr.gif"/>
 
 ## **𝐶𝑜𝑚𝑚𝑎𝑛𝑑𝑠**
 
