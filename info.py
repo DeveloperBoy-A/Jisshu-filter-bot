@@ -142,7 +142,7 @@ admin_cmds = [
     "/verify_id", "/index", "/send", "/leave",
     "/ban", "/unban", "/broadcast", "/grp_broadcast",
     "/delreq", "/channel", "/del_file", "/delete",
-    "/deletefiles", "/deleteall", 
+    "/deletefiles", "/deleteall", "/show_fsub", "/del_fsub", "/fsub", "/set_fsub", 
     "All These Commands Can Be Used Only By Admins.", 
     "⚡ powered by @its_ankit_meena907"
 ]
