@@ -41,7 +41,7 @@ MOVIE_UPDATE_CHANNEL = int(environ.get('MOVIE_UPDATE_CHANNEL', '-1002406952437')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/newmovies_support') #Support group link ( make sure bot is admin )
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-IS_VERIFY = is_enabled('IS_VERIFY', True)
+IS_VERIFY = is_enabled('IS_VERIFY', "True")
 #---------------------------------------------------------------
 TUTORIAL = environ.get("TUTORIAL", "https://t.me/+A_IsS5dtwotkMzU1")
 TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/+A_IsS5dtwotkMzU1")
@@ -49,12 +49,12 @@ TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/+A_IsS5dtwotkMzU1")
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://graph.org/file/1669ab9af68eaa62c3ca4.jpg")
 SHORTENER_API = environ.get("SHORTENER_API", "67953c01ee00c1a64eaa18917d948a57140f1915")
 SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", 'shortxlinks.com')
-SHORTENER_API2 = environ.get("SHORTENER_API2", "67953c01ee00c1a64eaa18917d948a57140f1915")
-SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", 'shortxlinks.com')
-SHORTENER_API3 = environ.get("SHORTENER_API3", "67953c01ee00c1a64eaa18917d948a57140f1915")
-SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", 'shortxlinks.com')
-TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "8400"))
-THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "8400"))
+SHORTENER_API2 = environ.get("SHORTENER_API2", "33d3046c5fa6900b043b04926fb53d2adfdf6347")
+SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", "omegalinks.in")
+SHORTENER_API3 = environ.get("SHORTENER_API3", "e67407d1e3c96960fecebcc1eb34d696f925c6a6")
+SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "ez4short.com")
+TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "14400"))
+THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "14400"))
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 LANGUAGES = ["hindi", "english", "telugu", "tamil", "kannada", "malayalam", "bengali", "marathi", "gujarati", "punjabi", "marathi"]
@@ -79,14 +79,14 @@ REACTIONS = ["👀", "😱", "🔥", "😍", "🎉", "🥰", "😇", "⚡"]
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 FILE_AUTO_DEL_TIMER = int(environ.get('FILE_AUTO_DEL_TIMER', '600'))
-AUTO_FILTER = is_enabled('AUTO_FILTER', True)
+AUTO_FILTER = is_enabled('AUTO_FILTER', "True")
 IS_PM_SEARCH = is_enabled('IS_PM_SEARCH', False)
 IS_SEND_MOVIE_UPDATE = is_enabled('IS_SEND_MOVIE_UPDATE', False) # Don't Change It ( If You Want To Turn It On Then Turn It On By Commands) We Suggest You To Make It Turn Off If You Are Indexing Files First Time.
 PORT = environ.get('PORT', '5000')
 MAX_BTN = int(environ.get('MAX_BTN', '8'))
 AUTO_DELETE = is_enabled('AUTO_DELETE', True)
 DELETE_TIME = int(environ.get('DELETE_TIME', 600))
-IMDB = is_enabled('IMDB', False)
+IMDB = is_enabled('IMDB', "False")
 FILE_CAPTION = environ.get('FILE_CAPTION', f'{script.FILE_CAPTION}')
 IMDB_TEMPLATE = environ.get('IMDB_TEMPLATE', f'{script.IMDB_TEMPLATE_TXT}')
 LONG_IMDB_DESCRIPTION = is_enabled('LONG_IMDB_DESCRIPTION', False)
