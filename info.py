@@ -43,9 +43,9 @@ SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/newmovies_support') #Su
 #---------------------------------------------------------------
 IS_VERIFY = is_enabled('IS_VERIFY', "True")
 #---------------------------------------------------------------
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/+A_IsS5dtwotkMzU1")
-TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/+A_IsS5dtwotkMzU1")
-TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/+A_IsS5dtwotkMzU1")
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/newmovies_support/653")
+TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/newmovies_support/653")
+TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/newmovies_support/653")
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://graph.org/file/1669ab9af68eaa62c3ca4.jpg")
 SHORTENER_API = environ.get("SHORTENER_API", "67953c01ee00c1a64eaa18917d948a57140f1915")
 SHORTENER_WEBSITE = environ.get("SHORTENER_WEBSITE", 'shortxlinks.com')
@@ -53,8 +53,8 @@ SHORTENER_API2 = environ.get("SHORTENER_API2", "33d3046c5fa6900b043b04926fb53d2a
 SHORTENER_WEBSITE2 = environ.get("SHORTENER_WEBSITE2", "omegalinks.in")
 SHORTENER_API3 = environ.get("SHORTENER_API3", "e67407d1e3c96960fecebcc1eb34d696f925c6a6")
 SHORTENER_WEBSITE3 = environ.get("SHORTENER_WEBSITE3", "ez4short.com")
-TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "14400"))
-THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "14400"))
+TWO_VERIFY_GAP = int(environ.get('TWO_VERIFY_GAP', "1800"))
+THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "3600"))
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 LANGUAGES = ["hindi", "english", "telugu", "tamil", "kannada", "malayalam", "bengali", "marathi", "gujarati", "punjabi", "marathi"]
