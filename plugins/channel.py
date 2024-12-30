@@ -80,7 +80,7 @@ async def send_movie_updates(bot, file_name, caption, file_id):
         search_movie = movie_name.replace(" ", '-')
         movie_update_channel = await db.movies_update_channel_id()    
         btn = [[
-            InlineKeyboardButton('📂 ɢᴇᴛ ғɪʟᴇ 📂', url=f'https://telegram.me/{temp.U_NAME}?start=getfile-{search_movie}')
+            InlineKeyboardButton('📂 ɢᴇᴛ ғɪʟᴇ 📂', url=f'https://t.me/+CN1d3qieTNw3ZTY1{temp.U_NAME}?start=getfile-{search_movie}')
         ],[
             InlineKeyboardButton('♻️ ʜᴏᴡ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ♻️', url=f'https://t.me.newmovies_support')
         ]]
