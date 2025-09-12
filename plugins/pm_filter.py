@@ -19,6 +19,7 @@ BUTTONS = {}
 FILES_ID = {}
 CAP = {}
 
+# zishan [
 from database.jsreferdb import referdb
 from database.config_db import mdb
 import logging
@@ -26,6 +27,7 @@ from urllib.parse import quote_plus
 from Jisshu.util.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
+# ] codes add
 
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
@@ -41,7 +43,7 @@ async def pm_search(client, message):
             return await auto_filter(client, message)
         await auto_filter(client, message)
     else:
-        await message.reply_text("<b><i>Éª á´€á´ É´á´á´› á´¡á´Ê€á´‹ÉªÉ´É¢ Êœá´‡Ê€á´‡. êœ±á´‡á´€Ê€á´„Êœ á´á´á´ Éªá´‡êœ± ÉªÉ´ á´á´œÊ€ á´á´á´ Éªá´‡ êœ±á´‡á´€Ê€á´„Êœ É¢Ê€á´á´œá´˜.</i></b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ“ á´á´á´ Éªá´‡ êœ±á´‡á´€Ê€á´„Êœ É¢Ê€á´á´œá´˜ ", url=MOVIE_GROUP_LINK)]]))
+        await message.reply_text("<b><i>Éª á´€á´ É´á´á´› á´¡á´Ê€á´‹ÉªÉ´É¢ Êœá´‡Ê€á´‡. êœ±á´‡á´€Ê€á´„Êœ á´á´á´ Éªá´‡êœ± ÉªÉ´ á´á´œÊ€ á´á´á´ Éªá´‡ êœ±á´‡á´€Ê€á´„Êœ É¢Ê€á´á´œá´˜.</i></b>", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ“ á´á´á´ Éªá´‡ êœ±á´‡á´€Ê€á´„Êœ É¢Ê€á´á´œá´˜ ", url='https://t.me/newmoviewebseries_group')]]))
         
     
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -53,21 +55,18 @@ async def group_search(client, message):
     settings = await get_settings(chat_id)
  
     if message.chat.id == SUPPORT_GROUP :
-        try:
-            if message.text.startswith("/"):
-                return
-            files, n_offset, total = await get_search_results(message.text, offset=0)
-            if total != 0:
-                msg = await message.reply_text(script.SUPPORT_GRP_MOVIE_TEXT.format(message.from_user.mention(), total), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('É¢á´‡á´› Ò“ÉªÊŸá´‡s Ò“Ê€á´á´ Êœá´‡Ê€á´‡ ðŸ˜‰' , url=MOVIE_GROUP_LINK)]]))
-                await asyncio.sleep(300)
-                return await msg.delete()
-            else: 
-                return
-        except Exception as e:
-            print(f"{e}")
-            await bot.send_message(LOG_CHANNEL, f'Error - {e}')
+                if message.text.startswith("/"):
+                    return
+                files, n_offset, total = await get_search_results(message.text, offset=0)
+                if total != 0:
+                    link = await db.get_set_grp_links(index=1)
+                    msg = await message.reply_text(script.SUPPORT_GRP_MOVIE_TEXT.format(message.from_user.mention(), total), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('É¢á´‡á´› Ò“ÉªÊŸá´‡s Ò“Ê€á´á´ Êœá´‡Ê€á´‡ ðŸ˜‰' , url='https://t.me/newmoviewebseries_group')]]))
+                    await asyncio.sleep(300)
+                    return await msg.delete()
+                else: return     
     if settings["auto_filter"]:
         if not user_id:
+            #await message.reply("<b>ðŸš¨ Éª'á´ É´á´á´› á´¡á´Ê€á´‹ÉªÉ´É¢ Ò“á´Ê€ á´€É´á´É´Êá´á´á´œêœ± á´€á´…á´ÉªÉ´!</b>")
             return
         
         if 'hindi' in message.text.lower() or 'tamil' in message.text.lower() or 'telugu' in message.text.lower() or 'malayalam' in message.text.lower() or 'kannada' in message.text.lower() or 'english' in message.text.lower() or 'gujarati' in message.text.lower(): 
@@ -124,41 +123,21 @@ async def group_search(client, message):
 @Client.on_callback_query(filters.regex(r"^reffff"))
 async def refercall(bot, query):
     btn = [[
-        InlineKeyboardButton('â€¢ ÉªÉ´á´ Éªá´›á´‡ ÊŸÉªÉ´á´‹ â€¢', url=f'https://telegram.me/share/url?url=https://telegram.dog/{bot.me.username}?start=reff_{query.from_user.id}&text=Hello%21%20Experience%20a%20bot%20that%20offers%20a%20vast%20library%20of%20unlimited%20movies%20and%20series.%20%F0%9F%98%83'),
-        InlineKeyboardButton(f'â³ {referdb.get_refer_points(query.from_user.id)}', callback_data='ref_point')
-    ], [
-        InlineKeyboardButton('â€¢ á´„ÊŸá´sá´‡ â€¢', callback_data='close_data')
+        InlineKeyboardButton('Invite Link', url=f'https://telegram.me/share/url?url=https://t.me/{bot.me.username}?start=reff_{query.from_user.id}&text=Hello%21%20Experience%20a%20bot%20that%20offers%20a%20vast%20library%20of%20unlimited%20movies%20and%20series.%20%F0%9F%98%83'),
+        InlineKeyboardButton(f'â³ {referdb.get_refer_points(query.from_user.id)}', callback_data='ref_point'),
+        InlineKeyboardButton('Back', callback_data='close_data')
     ]]
     reply_markup = InlineKeyboardMarkup(btn)
     await bot.send_photo(
         chat_id=query.message.chat.id,
         photo="https://graph.org/file/1a2e64aee3d4d10edd930.jpg",
-        caption=f'Hay Your refer link:\n\nhttps://telegram.dog/{bot.me.username}?start=reff_{query.from_user.id}\n\nShare this link with your friends, Each time they join, you will get 10 referral points and after 100 points you will get 1 month premium subscription.',
+        caption=f'Hay Your refer link:\n\nhttps://t.me/{bot.me.username}?start=reff_{query.from_user.id}\n\nShare this link with your friends, Each time they join, you will get 10 referral points and after 100 points you will get 1 month premium subscription.',
         reply_markup=reply_markup,
         parse_mode=enums.ParseMode.HTML
     )
     await query.answer()
 	
-@Client.on_callback_query(filters.regex("admincmd"))
-async def admin_commands(client, query):
-    if query.from_user.id not in ADMINS:
-        return await query.answer('á´›ÊœÉªêœ± Éªêœ± É´á´á´› êœ°á´Ê€ Êá´á´œ Ê™Ê€á´!', show_alert=True)
 
-    buttons = [[
-        InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='help'),
-    ]]
-    reply_markup = InlineKeyboardMarkup(buttons)
-
-    await client.edit_message_media(
-        chat_id=query.message.chat.id,
-        message_id=query.message.id,
-        media=InputMediaAnimation(
-            media="https://cdn.jsdelivr.net/gh/Jisshubot/JISSHU_BOTS/Video.mp4/Welcome_video_20240921_184741_0001.gif",
-            caption=script.ADMIN_CMD_TXT,
-            parse_mode=enums.ParseMode.HTML
-        ),
-        reply_markup=reply_markup
-    )
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
@@ -182,30 +161,34 @@ async def next_page(bot, query):
     if not files:
         return
     temp.FILES_ID[key] = files
+    batch_ids = files
+    temp.FILES_ID[f"{query.message.chat.id}-{query.id}"] = batch_ids
+    batch_link = f"batchfiles#{query.message.chat.id}#{query.id}#{query.from_user.id}"
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
     settings = await get_settings(query.message.chat.id)
     reqnxt  = query.from_user.id if query.from_user else 0
     temp.CHAT[query.from_user.id] = query.message.chat.id
+    #del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
     else:
         btn = [[InlineKeyboardButton(text=f"ðŸ“ {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", url=f'https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}'),]
                 for file in files
               ]
     btn.insert(0,[
-	InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+	InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
         ])
     btn.insert(1, [
         InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê ", callback_data=f"qualities#{key}#{offset}#{req}"),
-	    InlineKeyboardButton("êœ±á´‡á´€êœ±á´É´", callback_data=f"seasons#{key}#{offset}#{req}"),
+	InlineKeyboardButton("êœ±á´‡á´€êœ±á´É´", callback_data=f"seasons#{key}#{offset}#{req}"),
         InlineKeyboardButton("ÊŸá´€É´É¢á´œá´€É¢á´‡ ", callback_data=f"languages#{key}#{offset}#{req}")
     ])    
 
@@ -218,25 +201,25 @@ async def next_page(bot, query):
     if n_offset == 0:
 
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"next_{req}_{key}_{off_set}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"next_{req}_{key}_{off_set}"),
              InlineKeyboardButton(f"á´˜á´€É¢á´‡ {math.ceil(int(offset) / int(MAX_BTN)) + 1} / {math.ceil(total / int(MAX_BTN))}", callback_data="pages")]
         )
     elif off_set is None:
         btn.append(
             [InlineKeyboardButton(f"{math.ceil(int(offset) / int(MAX_BTN)) + 1} / {math.ceil(total / int(MAX_BTN))}", callback_data="pages"),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"next_{req}_{key}_{n_offset}")])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"next_{req}_{key}_{n_offset}")])
     else:
         btn.append(
             [
-                InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"next_{req}_{key}_{off_set}"),
+                InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"next_{req}_{key}_{off_set}"),
                 InlineKeyboardButton(f"{math.ceil(int(offset) / int(MAX_BTN)) + 1} / {math.ceil(total / int(MAX_BTN))}", callback_data="pages"),
-                InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"next_{req}_{key}_{n_offset}")
+                InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"next_{req}_{key}_{n_offset}")
             ],
         )
     if settings["link"]:
         links = ""
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
         await query.message.edit_text(cap + links + js_ads, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
         return        
     try:
@@ -253,7 +236,7 @@ async def seasons_cb_handler(client: Client, query: CallbackQuery):
     if int(req) != query.from_user.id:
         return await query.answer(script.ALRT_TXT, show_alert=True) 
     btn= []
-    for i in range(0, len(SEASONS)-1, 2):
+    for i in range(0, len(SEASONS)-1, 3):
         btn.append([
             InlineKeyboardButton(
                 text=SEASONS[i].title(),
@@ -263,9 +246,13 @@ async def seasons_cb_handler(client: Client, query: CallbackQuery):
                 text=SEASONS[i+1].title(),
                 callback_data=f"season_search#{SEASONS[i+1].lower()}#{key}#0#{offset}#{req}"
             ),
+            InlineKeyboardButton(
+                text=SEASONS[i+2].title(),
+                callback_data=f"season_search#{SEASONS[i+2].lower()}#{key}#0#{offset}#{req}"
+            ),
         ])
 
-    btn.append([InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
+    btn.append([InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
     await query.message.edit_text("<b>ÉªÉ´ á´¡ÊœÉªá´„Êœ sá´‡á´€sá´É´ á´…á´ Êá´á´œ á´¡á´€É´á´›, á´„Êœá´á´sá´‡ Ò“Ê€á´á´ Êœá´‡Ê€á´‡ â†“â†“</b>", reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -305,21 +292,24 @@ async def season_search(client: Client, query: CallbackQuery):
             await query.answer(f"sá´Ê€Ê€Ê {season.title()} É´á´á´› Ò“á´á´œÉ´á´… Ò“á´Ê€ {search}", show_alert=1)
             return
 
-    temp.FILES_ID[key] = files
+    batch_ids = files
+    temp.FILES_ID[f"{query.message.chat.id}-{query.id}"] = batch_ids
+    batch_link = f"batchfiles#{query.message.chat.id}#{query.id}#{query.from_user.id}"
     reqnxt = query.from_user.id if query.from_user else 0
     settings = await get_settings(query.message.chat.id)
     temp.CHAT[query.from_user.id] = query.message.chat.id
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
+  #  del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
     else:
         btn = [[
                 InlineKeyboardButton(text=f"ðŸ”— {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", callback_data=f'cfiles#{reqnxt}#{file.file_id}'),]
@@ -327,7 +317,7 @@ async def season_search(client: Client, query: CallbackQuery):
               ]
    
     btn.insert(0,[
-	InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+	InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
         ])
     btn.insert(1, [
         InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê ", callback_data=f"qualities#{key}#{offset}#{req}"),
@@ -341,21 +331,21 @@ async def season_search(client: Client, query: CallbackQuery):
         )
     elif n_offset == 0:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"season_search#{season}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"season_search#{season}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
             ])
     elif offset==0:
         btn.append(
             [InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}",callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"season_search#{season}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"season_search#{season}#{key}#{n_offset}#{orginal_offset}#{req}"),])
     else:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"season_search#{season}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"season_search#{season}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"season_search#{season}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"season_search#{season}#{key}#{n_offset}#{orginal_offset}#{req}"),])
 
     btn.append([
-        InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
+        InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
     await query.message.edit_text(cap + links + js_ads, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -365,7 +355,7 @@ async def years_cb_handler(client: Client, query: CallbackQuery):
     if int(req) != query.from_user.id:
         return await query.answer(script.ALRT_TXT, show_alert=True)
     btn  = []
-    for i in range(0, len(YEARS)-1, 2):
+    for i in range(0, len(YEARS)-1, 3):
         btn.append([
             InlineKeyboardButton(
                 text=YEARS[i].title(),
@@ -375,9 +365,13 @@ async def years_cb_handler(client: Client, query: CallbackQuery):
                 text=YEARS[i+1].title(),
                 callback_data=f"years_search#{YEARS[i+1].lower()}#{key}#0#{offset}#{req}"
             ),
+            InlineKeyboardButton(
+                text=YEARS[i+2].title(),
+                callback_data=f"years_search#{YEARS[i+2].lower()}#{key}#0#{offset}#{req}"
+            ),
         ])
     
-    btn.append([InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
+    btn.append([InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
     await query.message.edit_text("<b>ÉªÉ´ á´¡ÊœÉªá´„Êœ Êá´‡á´€Ê€ á´…á´ Êá´á´œ á´¡á´€É´á´›, á´„Êœá´á´sá´‡ Ò“Ê€á´á´ Êœá´‡Ê€á´‡ â†“â†“</b>", reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -403,21 +397,25 @@ async def year_search(client: Client, query: CallbackQuery):
         await query.answer(f"sá´Ê€Ê€Ê Êá´‡á´€Ê€ {year.title()} É´á´á´› Ò“á´á´œÉ´á´… Ò“á´Ê€ {search}", show_alert=1)
         return
 
-    temp.FILES_ID[key] = files
+    batch_ids = files
+    temp.FILES_ID[f"{query.message.chat.id}-{query.id}"] = batch_ids
+    batch_link = f"batchfiles#{query.message.chat.id}#{query.id}#{query.from_user.id}"
+
     reqnxt = query.from_user.id if query.from_user else 0
     settings = await get_settings(query.message.chat.id)
     temp.CHAT[query.from_user.id] = query.message.chat.id
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
+    #del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
     else:
         btn = [[
                 InlineKeyboardButton(text=f"ðŸ”— {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", callback_data=f'cfiles#{reqnxt}#{file.file_id}'),]
@@ -426,11 +424,11 @@ async def year_search(client: Client, query: CallbackQuery):
         
    
     btn.insert(0,[
-	InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+	InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
         ])
     btn.insert(1, [
         InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê ", callback_data=f"qualities#{key}#{offset}#{req}"),
-        InlineKeyboardButton("êœ±á´‡á´€êœ±á´É´", callback_data=f"seasons#{key}#{offset}#{req}"),
+	InlineKeyboardButton("êœ±á´‡á´€êœ±á´É´", callback_data=f"seasons#{key}#{offset}#{req}"),
         InlineKeyboardButton("ÊŸá´€É´É¢á´œá´€É¢á´‡ ", callback_data=f"languages#{key}#{offset}#{req}")
     ])    
     
@@ -440,21 +438,21 @@ async def year_search(client: Client, query: CallbackQuery):
         )
     elif n_offset == 0:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"years_search#{year}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"years_search#{year}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
             ])
     elif offset==0:
         btn.append(
             [InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}",callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"years_search#{year}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"years_search#{year}#{key}#{n_offset}#{orginal_offset}#{req}"),])
     else:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"years_search#{year}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"years_search#{year}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"years_search#{year}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"years_search#{year}#{key}#{n_offset}#{orginal_offset}#{req}"),])
 
     btn.append([
-        InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
+        InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
     await query.message.edit_text(cap + links + js_ads, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -464,7 +462,7 @@ async def quality_cb_handler(client: Client, query: CallbackQuery):
     if int(req) != query.from_user.id:
         return await query.answer(script.ALRT_TXT, show_alert=True)
     btn= []
-    for i in range(0, len(QUALITIES)-1, 2):
+    for i in range(0, len(QUALITIES)-1, 3):
         btn.append([
             InlineKeyboardButton(
                 text=QUALITIES[i].title(),
@@ -474,8 +472,12 @@ async def quality_cb_handler(client: Client, query: CallbackQuery):
                 text=QUALITIES[i+1].title(),
                 callback_data=f"quality_search#{QUALITIES[i+1].lower()}#{key}#0#{offset}#{req}"
             ),
+            InlineKeyboardButton(
+                text=QUALITIES[i+2].title(),
+                callback_data=f"quality_search#{QUALITIES[i+2].lower()}#{key}#0#{offset}#{req}"
+            ),
         ])
-    btn.append([InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
+    btn.append([InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
     await query.message.edit_text("<b>ÉªÉ´ á´¡ÊœÉªá´„Êœ Ç«á´œá´€ÊŸÉªá´›Ê á´…á´ Êá´á´œ á´¡á´€É´á´›, á´„Êœá´á´sá´‡ Ò“Ê€á´á´ Êœá´‡Ê€á´‡ â†“â†“</b>", reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -501,21 +503,25 @@ async def quality_search(client: Client, query: CallbackQuery):
         await query.answer(f"sá´Ê€Ê€Ê Ç«á´œá´€ÊŸÉªá´›Ê {qul.title()} É´á´á´› Ò“á´á´œÉ´á´… Ò“á´Ê€ {search}", show_alert=1)
         return
 
-    temp.FILES_ID[key] = files
+    batch_ids = files
+    temp.FILES_ID[f"{query.message.chat.id}-{query.id}"] = batch_ids
+    batch_link = f"batchfiles#{query.message.chat.id}#{query.id}#{query.from_user.id}"
+
     reqnxt = query.from_user.id if query.from_user else 0
     settings = await get_settings(query.message.chat.id)
     temp.CHAT[query.from_user.id] = query.message.chat.id
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
+  #  del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
     else:
         btn = [[
                 InlineKeyboardButton(text=f"ðŸ”— {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", callback_data=f'cfiles#{reqnxt}#{file.file_id}'),]
@@ -524,7 +530,7 @@ async def quality_search(client: Client, query: CallbackQuery):
         
  
     btn.insert(0,[
-	InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+	InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
         ])
     btn.insert(1, [
         InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê", callback_data=f"qualities#{key}#{offset}#{req}"),
@@ -537,21 +543,21 @@ async def quality_search(client: Client, query: CallbackQuery):
         )
     elif n_offset == 0:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"quality_search#{qul}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"quality_search#{qul}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
             ])
     elif offset==0:
         btn.append(
             [InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}",callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"quality_search#{qul}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"quality_search#{qul}#{key}#{n_offset}#{orginal_offset}#{req}"),])
     else:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"quality_search#{qul}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"quality_search#{qul}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"quality_search#{qul}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"quality_search#{qul}#{key}#{n_offset}#{orginal_offset}#{req}"),])
 
     btn.append([
-        InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
+        InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
     await query.message.edit_text(cap + links + js_ads, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
     return
     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
@@ -573,7 +579,7 @@ async def languages_cb_handler(client: Client, query: CallbackQuery):
                 callback_data=f"lang_search#{LANGUAGES[i+1].lower()}#{key}#0#{offset}#{req}"
             ),
                     ])
-    btn.append([InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
+    btn.append([InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{offset}")])
     await query.message.edit_text("<b>ÉªÉ´ á´¡ÊœÉªá´„Êœ ÊŸá´€É´É¢á´œá´€É¢á´‡ á´…á´ Êá´á´œ á´¡á´€É´á´›, á´„Êœá´á´sá´‡ Ò“Ê€á´á´ Êœá´‡Ê€á´‡ â†“â†“</b>", reply_markup=InlineKeyboardMarkup(btn))
     return
 
@@ -606,7 +612,10 @@ async def lang_search(client: Client, query: CallbackQuery):
         if not files:
             return await query.answer(f"sá´Ê€Ê€Ê ÊŸá´€É´É¢á´œá´€É¢á´‡ {lang.title()} É´á´á´› Ò“á´á´œÉ´á´… Ò“á´Ê€ {search}", show_alert=1)
 
-    temp.FILES_ID[key] = files    
+    batch_ids = files
+    temp.FILES_ID[f"{query.message.chat.id}-{query.id}"] = batch_ids
+    batch_link = f"batchfiles#{query.message.chat.id}#{query.id}#{query.from_user.id}"
+
     reqnxt = query.from_user.id if query.from_user else 0
     settings = await get_settings(query.message.chat.id)
     group_id = query.message.chat.id
@@ -614,15 +623,16 @@ async def lang_search(client: Client, query: CallbackQuery):
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
 
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
+    #del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}</a></b>"""
     else:
         btn = [[
                 InlineKeyboardButton(text=f"ðŸ”— {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", callback_data=f'cfiles#{reqnxt}#{file.file_id}'),]
@@ -631,7 +641,7 @@ async def lang_search(client: Client, query: CallbackQuery):
         
 
     btn.insert(0,[
-	InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+	InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
         ])
     btn.insert(1, [
         InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê", callback_data=f"qualities#{key}#{offset}#{req}"),
@@ -644,21 +654,21 @@ async def lang_search(client: Client, query: CallbackQuery):
         )
     elif n_offset == 0:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"lang_search#{lang}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"lang_search#{lang}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
             ])
     elif offset==0:
         btn.append(
             [InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}",callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"lang_search#{lang}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"lang_search#{lang}#{key}#{n_offset}#{orginal_offset}#{req}"),])
     else:
         btn.append(
-            [InlineKeyboardButton("â‹ž Ê™á´€á´„á´‹", callback_data=f"lang_search#{lang}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
+            [InlineKeyboardButton("âª» Ê™á´€á´„á´‹", callback_data=f"lang_search#{lang}#{key}#{offset- int(MAX_BTN)}#{orginal_offset}#{req}"),
              InlineKeyboardButton(f"{math.ceil(offset / int(MAX_BTN)) + 1}/{math.ceil(total / int(MAX_BTN))}", callback_data="pages",),
-             InlineKeyboardButton("É´á´‡xá´› â‹Ÿ", callback_data=f"lang_search#{lang}#{key}#{n_offset}#{orginal_offset}#{req}"),])
+             InlineKeyboardButton("É´á´‡xá´› âª¼", callback_data=f"lang_search#{lang}#{key}#{n_offset}#{orginal_offset}#{req}"),])
 
     btn.append([
-        InlineKeyboardButton(text="â‹ž Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
+        InlineKeyboardButton(text="âª» Ê™á´€á´„á´‹ á´›á´ á´á´€ÉªÉ´ á´˜á´€É¢á´‡", callback_data=f"next_{req}_{key}_{orginal_offset}"),])
     await query.message.edit_text(cap + links + js_ads, disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML, reply_markup=InlineKeyboardMarkup(btn))
     return
     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
@@ -670,7 +680,7 @@ async def advantage_spoll_choker(bot, query):
         return await query.answer(script.ALRT_TXT, show_alert=True)
     movie = await get_poster(id, id=True)
     search = movie.get('title')
-    await query.answer('This is not available now')
+    await query.answer('bhai sahab hamare pass nahin Hai à¤®à¥à¤à¥‡ massage à¤•à¤° à¤¦à¥€à¤œà¤¿à¤ à¤®à¥ˆà¤‚ à¤­à¥‡à¤œ à¤¦à¥‚à¤‚à¤—à¤¾')
     files, offset, total_results = await get_search_results(search)
     if files:
         k = (search, files, offset, total_results)
@@ -688,7 +698,7 @@ async def advantage_spoll_choker(bot, query):
 async def pmfile_cb(client, query):
     _, userid, fileid = query.data.split("#")
     if query.from_user.id != userid:
-        await query.answer("Please Request Your Own!!", show_alert=True)
+        await query.answer("Request Your Own!!", show_alert=True)
         return
 
     await query.answer(f"https://telegram.dog/{temp.U_NAME}?start=file_{query.message.chat.id}_{fileid}")
@@ -703,7 +713,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             user = query.from_user.id
         if int(user) != 0 and query.from_user.id != int(user):
             return await query.answer(script.ALRT_TXT, show_alert=True)
-        await query.answer("á´›Êœá´€É´á´‹s êœ°á´Ê€ á´„ÊŸá´sá´‡ ðŸ™ˆ")
+        await query.answer("á´›Êœá´€É´á´‹s êœ°á´Ê€ á´„ÊŸá´sá´‡ ")
         await query.message.delete()
         try:
             await query.message.reply_to_message.delete()
@@ -727,16 +737,24 @@ async def cb_handler(client: Client, query: CallbackQuery):
             else:
                 await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)    
 
-    elif query.data.startswith("send_all"):
-        ident, key = query.data.split("#")
-        user = query.message.reply_to_message.from_user.id
-        if int(user) != 0 and query.from_user.id != int(user):
-            return await query.answer(script.ALRT_TXT, show_alert=True)
-        files = temp.FILES_ID.get(key)
-        if not files:
-            await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name),show_alert=True)
-            return        
-        await query.answer(url=f"https://t.me/{temp.U_NAME}?start=allfiles_{query.message.chat.id}_{key}")
+    elif query.data.startswith("checksub"):
+        ident, file_id , grp_id = query.data.split("#")
+        if grp_id != 'None' or grp_id != '':
+            chat_id = grp_id
+        else:
+            chat_id = query.message.chat.id
+        if AUTH_CHANNEL and not await is_req_subscribed(client, query):
+            await query.answer("Éª ÊŸÉªá´‹á´‡ Êá´á´œÊ€ sá´á´€Ê€á´›É´á´‡ss Ê™á´œá´› á´…á´É´'á´› Ê™á´‡ á´á´ á´‡Ê€sá´á´€Ê€á´› ðŸ˜’\nêœ°ÉªÊ€sá´› á´Šá´ÉªÉ´ á´á´œÊ€ á´œá´˜á´…á´€á´›á´‡s á´„Êœá´€É´É´á´‡ÊŸ ðŸ˜’ à¤ªà¤¹à¤²à¥‡ Update channel à¤•à¥‹ join à¤•à¤°à¥‹ à¤«à¤¿à¤° try again à¤•à¤°à¥‹", show_alert=True)
+            return         
+        files_ = await get_file_details(file_id)
+        if not files_:
+            return await query.answer('É´á´ sá´œá´„Êœ êœ°ÉªÊŸá´‡ á´‡xÉªsá´›s ðŸš«')
+        files = files_[0]
+        btn = [[
+            InlineKeyboardButton('ðŸŽ—ï¸ É¢á´‡á´› Êá´á´œÊ€ Ò“ÉªÊŸá´‡ ðŸŽ—ï¸', url=f'https://t.me/{temp.U_NAME}?start=file_{chat_id}_{file_id}')
+        ]]
+        reply_markup = InlineKeyboardMarkup(btn)
+        return await query.message.edit(text=f'<b>á´›Êœá´€É´á´‹s Ò“á´Ê€ á´Šá´ÉªÉ´ÉªÉ´É¢ á´á´œÊ€ á´„Êœá´€É´É´á´‡ÊŸ ðŸ”¥ðŸ˜—\nÉ¢á´‡á´› Êá´á´œÊ€ Ò“ÉªÊŸá´‡ : {files.file_name[:20]}.. Ê™Ê á´„ÊŸÉªá´„á´‹ÉªÉ´É¢ á´›Êœá´‡ Ê™á´œá´›á´›á´É´ Ê™á´‡ÊŸá´á´¡ âš¡\n\ná´á´€ÉªÉ´á´›á´€ÉªÉ´á´‡á´… Ê™Ê : @newmoviesonlyfree9</b>',reply_markup=reply_markup)
 
     elif query.data == "give_trial":
         user_id = query.from_user.id
@@ -749,7 +767,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_text(
                 text="á´„á´É´É¢Ê€á´€á´›á´œÊŸá´€á´›Éªá´É´êœ±ðŸŽ‰ Êá´á´œ á´„á´€É´ á´œsá´‡ êœ°Ê€á´‡á´‡ á´›Ê€á´€ÉªÊŸ êœ°á´Ê€ <u>5 á´ÉªÉ´á´œá´›á´‡s</u> êœ°Ê€á´á´ É´á´á´¡ !\n\nÉ´á´á´¡ á´‡xá´˜á´‡Ê€Éªá´‡É´á´„á´‡ á´á´œÊ€ á´˜Ê€á´‡á´Éªá´œá´ êœ±á´‡Ê€á´ Éªá´„á´‡ êœ°á´Ê€ 5 á´ÉªÉ´á´œá´›á´‡êœ±. á´›á´ Ê™á´œÊ á´á´œÊ€ á´˜Ê€á´‡á´Éªá´œá´ êœ±á´‡Ê€á´ Éªá´„á´‡ á´„ÊŸÉªá´„á´‹ á´É´ Ê™á´‡ÊŸá´á´¡ Ê™á´œá´›á´›á´É´.",
                 disable_web_page_preview=True,                  
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ’¸ á´„Êœá´‡á´„á´‹á´á´œá´› á´˜Ê€á´‡á´Éªá´œá´ á´˜ÊŸá´€É´êœ± ðŸ’¸", callback_data='getpremium')]]))
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ’¸ á´„Êœá´‡á´„á´‹á´á´œá´› á´˜Ê€á´‡á´Éªá´œá´ á´˜ÊŸá´€É´êœ± ðŸ’¸", callback_data='seeplans')]]))
             await client.send_message(LOG_CHANNEL, text=f"#FREE_TRAIL_CLAIMED\n\nðŸ‘¤ á´œêœ±á´‡Ê€ É´á´€á´á´‡ - {query.from_user.mention}\nâš¡ á´œêœ±á´‡Ê€ Éªá´… - {user_id}", disable_web_page_preview=True)
             return   
 	
@@ -764,12 +782,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
         online = f"{URL}watch/{log_msg.id}/{fileName}?hash={get_hash(log_msg)}"
         download = f"{URL}{log_msg.id}/{fileName}?hash={get_hash(log_msg)}"
         btn = [[
-            InlineKeyboardButton('ðŸ§¿ êœ±á´›Ê€á´‡á´€á´ á´É´ á´¡á´‡Ê™ ðŸ–¥', web_app=WebAppInfo(url=online))
-        ],[
             InlineKeyboardButton("á´¡á´€á´›á´„Êœ á´É´ÊŸÉªÉ´á´‡", url=online),
-            InlineKeyboardButton("êœ°á´€êœ±á´› á´…á´á´¡É´ÊŸá´á´€á´…", url=download)
+            InlineKeyboardButton("êœ°á´€sá´› á´…á´á´¡É´ÊŸá´á´€á´…", url=download)
         ],[
-            InlineKeyboardButton('âœ— á´„ÊŸá´sá´‡ âœ—', callback_data='close_data')
+            InlineKeyboardButton('âŒ á´„ÊŸá´sá´‡ âŒ', callback_data='close_data')
 	]]
         await query.edit_message_reply_markup(
         reply_markup=InlineKeyboardMarkup(btn)
@@ -798,102 +814,32 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer(f"Êá´á´œ sá´‡ÊŸá´‡á´„á´›á´‡á´… {lang.title()} ÊŸá´€É´É¢á´œá´€É¢á´‡ âš¡ï¸", show_alert=True)
   
     elif query.data == "start":
-        buttons = [[		
-                InlineKeyboardButton('â‡‹ á´€á´…á´… á´á´‡ á´›á´ Êá´á´œÊ€ É¢Ê€á´á´œá´˜ â‡‹', url=f'http://telegram.dog/{temp.U_NAME}?startgroup=start')		
-		],[
-		InlineKeyboardButton('â€¢ á´…Éªêœ±á´€Ê™ÊŸá´‡ á´€á´…êœ± â€¢', callback_data='jisshupremium'),
-                InlineKeyboardButton('â€¢ êœ±á´˜á´‡á´„Éªá´€ÊŸ â€¢', callback_data="special")
-                ],[
-                InlineKeyboardButton("â€¢ Êœá´‡ÊŸá´˜ â€¢", callback_data='help'),
-                InlineKeyboardButton('â€¢ á´€Ê™á´á´œá´› â€¢', callback_data='about')
-		],[
-                InlineKeyboardButton('â€¢ á´‡á´€Ê€É´ á´œÉ´ÊŸÉªá´Éªá´›á´‡á´… á´á´É´á´‡Ê á´¡Éªá´›Êœ Ê™á´á´› â€¢', callback_data='earn')
-	        ]] 
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await query.message.edit_media(
-            media=InputMediaPhoto(
-            media=random.choice(START_IMG),
-            caption=script.START_TXT.format(query.from_user.mention, get_status(), query.from_user.id),
-            parse_mode=enums.ParseMode.HTML 
-            ),
-            reply_markup=reply_markup
-	)
-#        await query.message.edit_text(
-#            text=script.START_TXT.format(query.from_user.mention, get_status(), query.from_user.id),
-#            reply_markup=reply_markup,
-#            parse_mode=enums.ParseMode.HTML
-#        )
-
-    elif query.data == "jisshupremium":
-        btn = [[
-                InlineKeyboardButton('Ê™á´œÊ á´˜Ê€á´‡á´Éªá´œá´', callback_data='seeplans'),
-                InlineKeyboardButton('Ê€á´‡êœ°á´‡Ê€ & á´‡á´€Ê€É´', callback_data="reffff")
-        ], [
-                InlineKeyboardButton('â‹ž Êœá´á´á´‡', callback_data='start')
-        ]]
-        reply_markup = InlineKeyboardMarkup(btn)
-        await query.message.edit_text(
-            text=script.JISSHUPREMIUM_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-	    
-    elif query.data == "special":
-        btn = [[
-                InlineKeyboardButton('â€¢ á´á´sá´› sá´‡á´€Ê€á´„Êœ â€¢', callback_data="mostsearch"),
-                InlineKeyboardButton('â€¢ á´›á´á´˜ á´›Ê€á´‡É´á´…ÉªÉ´É¢ â€¢', callback_data="trending")
-	],[
-		InlineKeyboardButton('â€¢ Éªá´á´€É¢á´‡ á´›á´ ÊŸÉªÉ´á´‹ â€¢', callback_data='telegraph'),
-        ],[
-                InlineKeyboardButton('â‹ž Êœá´á´á´‡', callback_data='start')
-        ]]
-        reply_markup = InlineKeyboardMarkup(btn)
-        await query.message.edit_text(
-            text=script.SPECIAL_TXT,
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )
-
-    elif query.data == "earn":
         buttons = [[
-            InlineKeyboardButton('â™»ï¸ á´€ÊŸÊŸ É¢Ê€á´á´œá´˜ êœ±á´‡á´›á´›ÉªÉ´É¢êœ± á´…á´‡á´›á´€ÉªÊŸêœ± â™»ï¸', callback_data='earn2')
-        ],[
-            InlineKeyboardButton('âª» Ê™á´€á´„á´‹ á´›á´ Êœá´á´á´‡', callback_data='start')            
-        ]]
+                InlineKeyboardButton('â˜† Aá´…á´… Má´‡ Tá´ Yá´á´œÊ€ GÊ€á´á´œá´˜ â˜†', url=f'http://t.me/{temp.U_NAME}?startgroup=start')
+                ],[
+                InlineKeyboardButton("Há´‡ÊŸá´˜ âš™ï¸", callback_data='features'),
+                InlineKeyboardButton('AÊ™á´á´œá´› ðŸ’Œ', callback_data=f'about')
+                ],[
+                InlineKeyboardButton('PÊ€á´‡á´Éªá´œá´ ðŸŽ«', callback_data='seeplans'),
+                InlineKeyboardButton('Rá´‡Ò“á´‡Ê€ âšœï¸', callback_data="reffff")
+                ],[
+                InlineKeyboardButton('Má´sá´› Sá´‡á´€Ê€á´„Êœ ðŸ”', callback_data="mostsearch"),
+                InlineKeyboardButton('Tá´á´˜ TÊ€á´‡É´á´…ÉªÉ´É¢ âš¡', callback_data="trending")
+                ]] 
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
-             text=script.EARN_TEXT.format(temp.B_LINK),
-             reply_markup=reply_markup,
-             disable_web_page_preview=True,
-             parse_mode=enums.ParseMode.HTML
-	)
-	    
+            text=script.START_TXT.format(query.from_user.mention, get_status(), query.from_user.id),
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
+        )      
     elif query.data == "seeplans":
         btn = [[
-            InlineKeyboardButton('ðŸ á´„Êœá´‡á´„á´‹ á´€ÊŸÊŸ á´˜ÊŸá´€É´êœ± & á´˜Ê€Éªá´„á´‡êœ± ðŸ', callback_data='free')
-        ],[
-            InlineKeyboardButton('âª» Ê™á´€á´„á´‹ á´›á´ Êœá´á´á´‡', callback_data='start')
-        ]]
-        reply_markup = InlineKeyboardMarkup(btn)
-        await client.edit_message_media(
-            query.message.chat.id, 
-            query.message.id, 
-            InputMediaPhoto(SUBSCRIPTION)
-        )
-        await query.message.edit_text(
-            text=script.PREPLANS_TXT.format(query.from_user.mention),
-            reply_markup=reply_markup,
-            parse_mode=enums.ParseMode.HTML
-        )  
-
-    elif query.data == "getpremium":
-        btn = [[
-            InlineKeyboardButton('ðŸ á´„Êœá´‡á´„á´‹ á´€ÊŸÊŸ á´˜ÊŸá´€É´êœ± & á´˜Ê€Éªá´„á´‡êœ± ðŸ', callback_data='free')
+            InlineKeyboardButton('ðŸ ð—–ð—¹ð—¶ð—°ð—¸ ð—”ð—¹ð—¹ ð—£ð—¹ð—®ð—»ð˜€ & ð—£ð—¿ð—¶ð—°ð—²ð˜€ ðŸ', callback_data='free')
         ],[
             InlineKeyboardButton('â€¢ ð—–ð—¹ð—¼ð˜€ð—² â€¢', callback_data='close_data')
         ]]
         reply_markup = InlineKeyboardMarkup(btn)
-        m=await query.message.reply_sticker("CAACAgUAAx0CZz_GMwACMBdnXZA4SejgJ6a_0TrNzOfn9ImI_QACNwsAArT4iFVaZPJf8ldVVh4E") 
+        m=await query.message.reply_sticker("CAACAgQAAxkBAAEiLZ9l7VMuTY7QHn4edR6ouHUosQQ9gwACFxIAArzT-FOmYU0gLeJu7x4E") 
         await m.delete()
         await query.message.reply_photo(
             photo=(SUBSCRIPTION),
@@ -901,15 +847,14 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
 	)
-	    
     elif query.data == "free":
         buttons = [[
-            InlineKeyboardButton('â˜†ðŸ“¸ êœ±á´‡É´á´… êœ±á´„Ê€á´‡á´‡É´êœ±Êœá´á´› ðŸ“¸â˜†', url=f'https://telegram.me/{OWNER_USERNAME}')
+            InlineKeyboardButton('â˜†ðŸ“¸ ð™Žð™šð™£ð™™ ð™¨ð™˜ð™§ð™šð™šð™£ð™¨ð™ð™¤ð™© ðŸ“¸â˜†', url=f'https://t.me/JisshuDeveloperBot')
         ],[
-            InlineKeyboardButton('ðŸ’Ž á´„á´œêœ±á´›á´á´ á´˜ÊŸá´€É´ ðŸ’Ž', callback_data='other')
+            InlineKeyboardButton('ðŸ’Ž ð—–ð˜‚ð˜€ð˜ð—¼ð—º ð—£ð—¹ð—®ð—» ðŸ’Ž', callback_data='other')
         ],[
-            InlineKeyboardButton('â€¢ Ê™á´€á´„á´‹ â€¢', callback_data='seeplans'),
-            InlineKeyboardButton('â€¢ á´„ÊŸá´êœ±á´‡ â€¢', callback_data='close_data')
+            InlineKeyboardButton('â€¢ ð—•ð—®ð—°ð—¸ â€¢', callback_data='broze'),
+            InlineKeyboardButton('â€¢ ð—–ð—¹ð—¼ð˜€ð—² â€¢', callback_data='close_data')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)             
         await client.edit_message_media(
@@ -922,10 +867,27 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup=reply_markup,
             parse_mode=enums.ParseMode.HTML
         )   
-    
+    #jisshu
+    elif query.data == "broze":
+       buttons = [[
+            InlineKeyboardButton('ðŸ ð—–ð—¹ð—¶ð—°ð—¸ ð—”ð—¹ð—¹ ð—£ð—¹ð—®ð—»ð˜€ & ð—£ð—¿ð—¶ð—°ð—²ð˜€ ðŸ', callback_data='free')
+        ], [
+            InlineKeyboardButton('â€¢ ð—–ð—¹ð—¼ð˜€ð—² â€¢', callback_data='close_data')
+       ]]
+       reply_markup = InlineKeyboardMarkup(buttons)
+  
+       await query.message.edit_media(
+         media=InputMediaPhoto(
+            media=SUBSCRIPTION, 
+            caption=script.PREPLANSS_TXT.format(query.from_user.mention()),
+            parse_mode=enums.ParseMode.HTML
+         ),
+         reply_markup=reply_markup
+       )
+        
     elif query.data == "other":
         buttons = [[
-            InlineKeyboardButton('ðŸ“² á´„á´É´á´›á´€á´„á´› á´›á´ á´á´¡É´á´‡Ê€', url=f'https://telegram.me/{OWNER_USERNAME}')
+            InlineKeyboardButton('â˜Žï¸ ð—–ð—¼ð—»ð˜ð—®ð—°ð˜ ð—¢ð˜„ð—»ð—²ð—¿ ð—§ð—¼ ð—žð—»ð—¼ð˜„ ð— ð—¼ð—¿ð—²', user_id = ADMINS[0])
         ],[
             InlineKeyboardButton('â€¢ ð—•ð—®ð—°ð—¸ â€¢', callback_data='free')
         ]]
@@ -947,14 +909,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "verifyon":
         await query.answer(f'Only the bot admin can á´É´ âœ“ or á´Ò“Ò“ âœ— this feature.', show_alert=True)
     
-    elif query.data == "help":
+    elif query.data == "features":
         buttons = [[
-		InlineKeyboardButton('â€¢ á´€á´…á´ÉªÉ´ â€¢', callback_data='admincmd'),              
-		InlineKeyboardButton('â€¢ É¢Ê€á´á´œá´˜ sá´‡á´›á´œá´˜ â€¢', callback_data='earn2')
-	], [
-		InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹ á´›á´ Êœá´á´á´‡', callback_data='start')
-	]]    
-        reply_markup = InlineKeyboardMarkup(buttons)    
+              InlineKeyboardButton('Aá´…á´ÉªÉ´ Cá´á´á´á´€É´á´…s', callback_data='admincmd'),
+              InlineKeyboardButton('Iá´á´€É¢á´‡ Tá´ LÉªÉ´á´‹', callback_data='telegraph'),
+              ], [
+              InlineKeyboardButton('F-Sá´œÊ™', callback_data='fsub'),
+              InlineKeyboardButton('GÊ€á´á´œá´˜ Sá´‡á´›á´œá´˜', callback_data='earn')
+              ], [
+              InlineKeyboardButton('â‹ž Back To Home', callback_data='start')
+              ]]
+    
+        reply_markup = InlineKeyboardMarkup(buttons)
+    
         await query.message.edit_media(
             media=InputMediaPhoto(
             media=random.choice(START_IMG),
@@ -963,7 +930,62 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ),
             reply_markup=reply_markup
 	)
+      #  await query.message.edit_text(
+      #      text=script.HELP_TXT,
+      #      reply_markup=reply_markup,
+       #     parse_mode=enums.ParseMode.HTML
+       # )   
         
+    elif query.data == "admincmd":
+    # If the user isn't an admin, return
+      if query.from_user.id not in ADMINS:
+        return await query.answer('á´›ÊœÉªêœ± Éªêœ± É´á´á´› êœ°á´Ê€ Êá´á´œ Ê™Ê€á´!', show_alert=True)
+    
+      buttons = [[
+	      InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='features'),
+	      InlineKeyboardButton('É´á´‡xá´› âª¼', callback_data='admincmd2'),
+      ]]
+      reply_markup = InlineKeyboardMarkup(buttons)
+    
+      await client.edit_message_media(
+          chat_id=query.message.chat.id,
+          message_id=query.message.id,
+          media=InputMediaAnimation(
+            media="https://cdn.jsdelivr.net/gh/Jisshubot/JISSHU_BOTS/Video.mp4/Welcome_video_20240921_184741_0001.gif",
+            caption=script.ADMIN_CMD_TXT,
+            parse_mode=enums.ParseMode.HTML
+          ),
+          reply_markup=reply_markup
+          )
+
+    elif query.data == "admincmd2":
+       buttons = [[
+	      InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='admincmd')]]
+       reply_markup = InlineKeyboardMarkup(buttons)
+    
+       await client.edit_message_media(
+          chat_id=query.message.chat.id,
+          message_id=query.message.id,
+          media=InputMediaAnimation(
+            media="https://cdn.jsdelivr.net/gh/Jisshubot/JISSHU_BOTS/Video.mp4/Welcome_video_20240921_184741_0001.gif",
+            caption=script.ADMIN_CMD_TXT2,
+            parse_mode=enums.ParseMode.HTML
+          ),
+          reply_markup=reply_markup
+      )
+	    
+    elif query.data == "fsub":
+        #add back button
+        buttons = [[
+            InlineKeyboardButton('â‡† á´€á´…á´… á´á´‡ á´›á´ Êá´á´œÊ€ É¢Ê€á´á´œá´˜s â‡†', url=f'http://t.me/{temp.U_NAME}?startgroup=start')],
+            [InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='features')]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.message.edit_text(
+            text=script.FSUB_TXT,
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
+        )
+    
     elif query.data == 'about':
         await query.message.edit_text(
             script.ABOUT_TEXT.format(query.from_user.mention(),temp.B_LINK),
@@ -971,19 +993,20 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 [[
 			InlineKeyboardButton('â€¼ï¸ á´…Éªêœ±á´„ÊŸá´€Éªá´á´‡Ê€ â€¼ï¸', callback_data='disclaimer')
 		],[
-			InlineKeyboardButton('sá´á´œÊ€á´„á´‡ á´„á´á´…á´‡', callback_data='source'),
-                        InlineKeyboardButton('á´„á´É´á´›Ê€ÉªÊ™á´œá´›á´Ê€s',callback_data='mydevelopers')
+			InlineKeyboardButton('New movies & Web series', callback_data='New movies & Web series')
+                ],[
+                        InlineKeyboardButton('My Developers ðŸ˜Ž',callback_data='mydevelopers')
 		],[
 			InlineKeyboardButton('â‹ž Êœá´á´á´‡', callback_data='start')]]
                 ),
             disable_web_page_preview = True
 	)
     elif query.data == "mydevelopers":
-        await query.answer("â¤ï¸ A Big Thank To All Contributors For Making This Bot Awesome!ðŸŽðŸŽª", show_alert=True)
+        await query.answer("Meet the minds behind this bot:\n\nðŸ‘¨â€ðŸ’» @JISSHU_BOTS\nðŸ‘¨â€ðŸ’» ðƒðžð¯ðžð¥ð¨ð©ðžð«_ðð¨ð²â„¢(ð“ð“·ð“´ð“²ð“½_ð“œð“®ð“®ð“·ð“ªðŸ˜)\nðŸ‘¨â€ðŸ’» @JOYBOY_ZORO\nðŸ‘¨â€ðŸ’» \n\n\nâ¤ï¸ A big thank you for making this bot awesome!", show_alert=True)
  
-    elif query.data == "source":
+    elif query.data == "New movies & Web series":
         buttons = [[
-            InlineKeyboardButton('Ê€á´‡á´˜á´', url='https://github.com/Jisshubot/Jisshu-filter-bot')
+            InlineKeyboardButton('', url='https://t.me/newmoviewebseries_group')
         ],[
             InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='about'),
             InlineKeyboardButton('â€¢ á´„ÊŸá´sá´‡ â€¢', callback_data='close_data')
@@ -997,7 +1020,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 	
     elif query.data == "disclaimer":
             btn = [[
-                    InlineKeyboardButton("ðŸ“² á´„á´É´á´›á´€á´„á´› á´›á´ á´á´¡É´á´‡Ê€ ",  url=f'https://telegram.me/{OWNER_USERNAME}')
+                    InlineKeyboardButton("ðŸ“² á´„á´É´á´›á´€á´„á´› á´›á´ á´á´¡É´á´‡Ê€ ", user_id = ADMINS[0])
                ],[
                     InlineKeyboardButton("â‡‹ Ê™á´€á´„á´‹ â‡‹", callback_data="about")
                   ]]
@@ -1007,18 +1030,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML 
 	    )
-    elif query.data == "earn2":
+    elif query.data == "earn":
        buttons = [[
-	      InlineKeyboardButton('â‡† á´€á´…á´… á´á´‡ á´›á´ Êá´á´œÊ€ É¢Ê€á´á´œá´˜s â‡†', url=f'http://telegram.dog/{temp.U_NAME}?startgroup=start')
+	      InlineKeyboardButton('â‡† á´€á´…á´… á´á´‡ á´›á´ Êá´á´œÊ€ É¢Ê€á´á´œá´˜s â‡†', url=f'http://t.me/{temp.U_NAME}?startgroup=start')
        ],[
-              InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='help')
+              InlineKeyboardButton('â‹ž Êœá´á´á´‡', callback_data='features'),
+              InlineKeyboardButton('sá´œá´˜á´˜á´Ê€á´›', url=f'https://t.me/Jisshu_support'),
        ]]
        reply_markup = InlineKeyboardMarkup(buttons)
        await client.edit_message_media(
           chat_id=query.message.chat.id,
           message_id=query.message.id,
           media=InputMediaAnimation(
-            media="https://cdn.jsdelivr.net/gh/Jisshubot/JISSHU_BOTS/Video.mp4/Group_20240921_202540_0001.gif",
+            media="https://envs.sh/JS8.mp4",
             caption=script.GROUP_TEXT.format(temp.B_LINK),
             parse_mode=enums.ParseMode.HTML
         ),
@@ -1027,7 +1051,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
    
     elif query.data == "telegraph":
         buttons = [[
-            InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='special')
+            InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='features')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)  
         await query.message.edit_text(
@@ -1037,7 +1061,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         )
     elif query.data == "font":
         buttons = [[
-            InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='special')
+            InlineKeyboardButton('â‹ž Ê™á´€á´„á´‹', callback_data='features')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons) 
         await query.message.edit_text(
@@ -1097,7 +1121,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await save_group_settings(grp_id, 'tutorial_3', TUTORIAL_3)
         await save_group_settings(grp_id, 'template', IMDB_TEMPLATE)
         await save_group_settings(grp_id, 'caption', FILE_CAPTION)
-        await save_group_settings(grp_id, 'fsub_id', AUTH_CHANNEL)
         await save_group_settings(grp_id, 'log', LOG_VR_CHANNEL)
         await query.answer('êœ±á´œá´„á´„á´‡êœ±êœ±Ò“á´œÊŸÊŸÊ Ê€á´‡êœ±á´‡á´›...')
         await query.message.edit_text("<b>êœ±á´œá´„á´„á´‡êœ±êœ±Ò“á´œÊŸÊŸÊ Ê€á´‡êœ±á´‡á´› É¢Ê€á´á´œá´˜ êœ±á´‡á´›á´›ÉªÉ´É¢êœ±...\n\nÉ´á´á´¡ êœ±á´‡É´á´… /details á´€É¢á´€ÉªÉ´</b>", reply_markup=reply_markup)
@@ -1405,13 +1428,12 @@ async def ai_spell_check(wrong_name):
             return movie
         movie_list.remove(movie)
     return
-	
 async def auto_filter(client, msg, spoll=False , pm_mode = False):
     if not spoll:
         message = msg
         search = message.text
         chat_id = message.chat.id
-        settings = await get_settings(chat_id)
+        settings = await get_settings(chat_id , pm_mode=pm_mode)
         searching_msg = await msg.reply_text(f'ðŸ”Ž sá´‡á´€Ê€á´„ÊœÉªÉ´É¢ {search}')
         files, offset, total_results = await get_search_results(search)
         await searching_msg.delete()
@@ -1429,7 +1451,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
                 return await advantage_spell_chok(msg)
             return
     else:
-        settings = await get_settings(msg.message.chat.id)
+        settings = await get_settings(msg.message.chat.id , pm_mode=pm_mode)
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
     req = message.from_user.id if message.from_user else 0
@@ -1438,13 +1460,13 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
     temp.FILES_ID[f"{message.chat.id}-{message.id}"] = batch_ids
     batch_link = f"batchfiles#{message.chat.id}#{message.id}#{message.from_user.id}"
     temp.CHAT[message.from_user.id] = message.chat.id
-    settings = await get_settings(message.chat.id)
+    settings = await get_settings(message.chat.id , pm_mode=pm_mode)
     del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     links = ""
     if settings["link"]:
         btn = []
         for file_num, file in enumerate(files, start=1):
-            links += f"""<b>\n\n{file_num}. <a href=https://telegram.dog/{temp.U_NAME}?start=file_{message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {formate_file_name(file.file_name)}</a></b>"""
+            links += f"""<b>\n\n{file_num}. <a href=https://t.me/{temp.U_NAME}?start={"pm_mode_" if pm_mode else ''}file_{ADMINS[0] if pm_mode else message.chat.id}_{file.file_id}>[{get_size(file.file_size)}] {formate_file_name(file.file_name)}</a></b>"""
     else:
         btn = [[InlineKeyboardButton(text=f"ðŸ”— {get_size(file.file_size)}â‰½ {formate_file_name(file.file_name)}", url=f'https://telegram.dog/{temp.U_NAME}?start=file_{message.chat.id}_{file.file_id}'),]
                for file in files
@@ -1452,7 +1474,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
     if offset != "":
         if total_results >= MAX_BTN:
             btn.insert(0,[
-                InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+                InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
             ])
             btn.insert(1, [
                 InlineKeyboardButton("Ç«á´œá´€ÊŸÉªá´›Ê ", callback_data=f"qualities#{key}#{offset}#{req}"),
@@ -1461,7 +1483,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
             ])            
         else:
             btn.insert(0,[
-                InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+                InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
                 InlineKeyboardButton("ÊŸá´€É´É¢á´œá´€É¢á´‡", callback_data=f"languages#{key}#{offset}#{req}")
             ])
             btn.insert(1,[
@@ -1469,7 +1491,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
             ])
     else:
         btn.insert(0,[
-            InlineKeyboardButton("ðŸ“¥ sá´‡É´á´… á´€ÊŸÊŸ Ò“ÉªÊŸá´‡s ðŸ“¥", callback_data=f"send_all#{key}"),
+            InlineKeyboardButton("ðŸ“¥ ð—¦ð—²ð—»ð—± ð—”ð—¹ð—¹ ð—™ð—¶ð—¹ð—²ð˜€ ðŸ“¥", callback_data=batch_link),
             ])
 
         btn.insert(1,[
@@ -1485,7 +1507,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
         req = message.from_user.id if message.from_user else 0
         btn.append(
             [InlineKeyboardButton(text=f"1/{math.ceil(int(total_results) / int(MAX_BTN))}", callback_data="pages"),
-             InlineKeyboardButton(text="É´á´‡xá´› â‹Ÿ", callback_data=f"next_{req}_{key}_{offset}")]
+             InlineKeyboardButton(text="É´á´‡xá´› âª¼", callback_data=f"next_{req}_{key}_{offset}")]
         )
         key = f"{message.chat.id}-{message.id}"
         BUTTONS[key] = search
@@ -1535,9 +1557,11 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
     ads, ads_name, _ = await mdb.get_advirtisment()
     ads_text = ""
     if ads is not None and ads_name is not None:
-        ads_url = f"https://telegram.dog/{temp.U_NAME}?start=ads"
+        ads_url = f"https://t.me/{temp.U_NAME}?start=ads"
         ads_text = f"<a href={ads_url}>{ads_name}</a>"
+
     js_ads = f"\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n <b>{ads_text}</b> \nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”" if ads_text else ""
+  #  del_msg = f"\n\n<b>âš ï¸ á´›ÊœÉªs á´á´‡ssá´€É¢á´‡ á´¡ÉªÊŸÊŸ Ê™á´‡ á´€á´œá´›á´ á´…á´‡ÊŸá´‡á´›á´‡ á´€êœ°á´›á´‡Ê€ <code>{get_readable_time(DELETE_TIME)}</code> á´›á´ á´€á´ á´Éªá´… á´„á´á´˜ÊÊ€ÉªÉ¢Êœá´› Éªssá´œá´‡s</b>" if settings["auto_delete"] else ''
     CAP[key] = cap
     if imdb and imdb.get('poster'):
         try:
@@ -1593,9 +1617,7 @@ async def auto_filter(client, msg, spoll=False , pm_mode = False):
                 await message.delete()
             except:
                 pass
-    return 
-
-
+    return            
 async def advantage_spell_chok(message):
     mv_id = message.id
     search = message.text
