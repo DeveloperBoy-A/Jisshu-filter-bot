@@ -25,9 +25,9 @@ MOVIE_GROUP_LINK = environ.get('MOVIE_GROUP_LINK', 'https://t.me/newmoviewebseri
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002325405552').split()]
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://DeveloperBoy-A:Jeetesh1999@developerboya.1txvg.mongodb.net/?retryWrites=true&w=majority&appName=DeveloperBoyA")
+DATABASE_URI = environ.get('DATABASE_URI', "")
 DATABASE_NAME = environ.get('DATABASE_NAME', "DeveloperBoy-A")
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'My_Tg_files')
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'sample_mflix')
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 #----------- There will be channel id add in all these ---------
