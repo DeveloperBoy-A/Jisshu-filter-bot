@@ -21,7 +21,7 @@ BOT_TOKEN = environ.get('BOT_TOKEN', '')
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '5308609720').split()]
 USERNAME = environ.get('USERNAME', "https://t.me/its_ankit_meena907") # ADMIN USERNAME
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002477743748'))
-MOVIE_GROUP_LINK = environ.get('MOVIE_GROUP_LINK', 'https://t.me/newmoviewebseries_group')
+MOVIE_GROUP_LINK = environ.get('MOVIE_GROUP_LINK', 'https://t.me/newmovieswebseries_group')
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002325405552').split()]
 #---------------------------------------------------------------
 #---------------------------------------------------------------
@@ -78,14 +78,14 @@ REACTIONS = ["👀", "😱", "🔥", "😍", "🎉", "🥰", "😇", "⚡"]
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-FILE_AUTO_DEL_TIMER = int(environ.get('FILE_AUTO_DEL_TIMER', '300'))
+FILE_AUTO_DEL_TIMER = int(environ.get('FILE_AUTO_DEL_TIMER', '120'))
 AUTO_FILTER = is_enabled('AUTO_FILTER', "True")
 IS_PM_SEARCH = is_enabled('IS_PM_SEARCH', False)
-IS_SEND_MOVIE_UPDATE = is_enabled('IS_SEND_MOVIE_UPDATE', False) # Don't Change It ( If You Want To Turn It On Then Turn It On By Commands) We Suggest You To Make It Turn Off If You Are Indexing Files First Time.
+IS_SEND_MOVIE_UPDATE = is_enabled('IS_SEND_MOVIE_UPDATE', "False") # Don't Change It ( If You Want To Turn It On Then Turn It On By Commands) We Suggest You To Make It Turn Off If You Are Indexing Files First Time.
 PORT = environ.get('PORT', '5000')
 MAX_BTN = int(environ.get('MAX_BTN', '8'))
 AUTO_DELETE = is_enabled('AUTO_DELETE', True)
-DELETE_TIME = int(environ.get('DELETE_TIME', 300))
+DELETE_TIME = int(environ.get('DELETE_TIME', 120))
 IMDB = is_enabled('IMDB', "False")
 FILE_CAPTION = environ.get('FILE_CAPTION', f'{script.FILE_CAPTION}')
 IMDB_TEMPLATE = environ.get('IMDB_TEMPLATE', f'{script.IMDB_TEMPLATE_TXT}')
